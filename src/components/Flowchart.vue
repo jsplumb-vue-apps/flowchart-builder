@@ -6,11 +6,8 @@
     import { defineComponent } from "vue";
 
     import {
-        AbsoluteLayout,
         EVENT_TAP,
-        EdgePathEditor,
         FLOWCHART_SHAPES, BASIC_SHAPES,
-        BlankEndpoint,
         OrthogonalConnector,
         DEFAULT,
         EVENT_CANVAS_CLICK,
@@ -19,10 +16,7 @@
         BackgroundPlugin,
         ShapeLibraryImpl,
         SelectionModes,
-        SvgExporterUI,
-        ImageExporterUI,
-        LabelOverlay,
-        consume
+        LabelOverlay
 
     } from "@jsplumbtoolkit/browser-ui"
 
@@ -61,12 +55,9 @@
             loadSurface(DEFAULT_VUE_SURFACE_ID, (s) => {
                 surface = s;
                 toolkit = surface.toolkitInstance;
-
-                window.tk = toolkit
-
+                window.s = s
+               // setTimeout(() => s.repaintEverything(), 500)
             })
-
-
         },
         methods:{
             toolkitParams:function() {
@@ -99,7 +90,7 @@
                             events: {
                                 [EVENT_TAP]: (params) => {
                                     // if zero nodes currently selected, or the shift key wasnt pressed, make this node the only one in the selection.
-                                    if (toolkit.getSelection()._nodes.length < 1 || params.e.shiftKey !== true) {
+                                    if (toolkit.getSelection().getNodes().length < 1 || params.e.shiftKey !== true) {
                                         toolkit.setSelection(params.obj)
                                     } else {
                                         // if multiple nodes already selected, or shift was pressed, add this node to the current selection.
@@ -238,12 +229,6 @@
 
             <!-- node/edge inspector -->
             <InspectorComponent v-bind:edge-mappings="edgeMappings"/>
-
-            <div class="description">
-                <p>
-                    This sample application is a builder for flowcharts.
-                </p>
-            </div>
         </div>
     </div>
 </template>
